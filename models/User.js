@@ -1,19 +1,26 @@
 const { Schema, model } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
 
+const validateEmail = function(email) {
+   let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+   return re.test(email)
+};
+
+
 const UserSchema = new Schema(
       {
-         userName: {
+         username: {
             type: String,
-            //unique
+            unique: true,
             required: true,
             trim: true
          },
          email: {
             type: String,
             required: true,
-            //unique
-            //must match a vaild email address(look into Mongoose's matching validation)
+            unique: true,
+            //validate: [validateEmail, 'Please fill a valid email address'],
+            match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
          },
          thoughts: [
             //array of id values referencing the thought model

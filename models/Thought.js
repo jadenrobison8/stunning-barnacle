@@ -1,27 +1,36 @@
 const { Schema, model, Types } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
 
-//SCHEMA ONLY
-//reaction id
-   //use mongoose's objectId data types
-   //default value is set to a new objectId
-
-//reactionBody
-   //string
-   //required
-   //280 character maximum
-
-//username
-   //string 
-   //required
-
-//createdAt
-   //date
-   //set defualt value to the current timestamp
-   //use a getter method to format the timestamp on query
-
-//schema settings
-//this will not be a model, but rather will be used as the reaction fields subdocument schema in the thought model
+const ReactionSchema = new Schema(
+   {
+      reactionId: {
+         type: Schema.Types.ObjectId,
+         default: () => new Types.ObjectId()
+      },
+      reactionBody: {
+         type: String,
+         required: true,
+         //280 character maximum
+         maxLength: [280, 'too many characters']
+      },
+      userName: {
+         type: String, 
+         required: true
+      },
+      createdAt: {
+         type: Date,
+         default: Date.now,
+         get: createdAtVal => dateFormat(createdAtVal)
+      }
+   },
+   {
+      //schema settings
+      //this will not be a model, but rather will be used as the reaction fields subdocument schema in the thought model
+      toJSON: {
+         getters: true
+      }
+   }
+);
 
 
 const ThoughtSchema = new Schema(
@@ -30,14 +39,16 @@ const ThoughtSchema = new Schema(
          type: String,
          required: true,
          //must be betweeen 1 and 280 characters 
+         minLength: [1, 'too few characters'],
+         maxLength: [280, 'too many characters']
       },
       createdAt: {
-         type: date,
+         type: Date,
          default: Date.now,
-         get: createdAtVal = dateFormat(createdAtVal)
+         get: createdAtVal => dateFormat(createdAtVal)
       },
       username: { //(the user that created this thought)
-         type: string,
+         type: String,
          required: true,
       },
       reactions: [ReactionSchema]
