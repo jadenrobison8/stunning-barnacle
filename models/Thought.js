@@ -13,7 +13,7 @@ const ReactionSchema = new Schema(
          //280 character maximum
          maxLength: [280, 'too many characters']
       },
-      userName: {
+      username: {
          type: String, 
          required: true
       },

@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
 
 const validateEmail = function(email) {
@@ -44,13 +44,13 @@ const UserSchema = new Schema(
             virtuals: true,
             getters: true
          },
-         id: true
+         id: false
       }
 );
 
 //create a virtual called friendCount that retrieves the length of the users friends array field on query
 UserSchema.virtual('friendCount').get(function() {
-   return this.friends.reduce((total, user) => total + user.friends.length + 1, 0);
+   return this.friends.reduce((total, user) => total + 1, 0);
 });
 
 

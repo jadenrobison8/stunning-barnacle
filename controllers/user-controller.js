@@ -19,7 +19,7 @@ const userController = {
    },
 
    //GET a single user by its _id
-   getUserById( {params} , res) {
+   getUserById({params} , res) {
       User.findOne({ _id: params.id })
          .populate({
             path: 'thoughts',
@@ -77,7 +77,7 @@ const userController = {
 
       //bonus: remove associated thoughts when deleted
       //Thought.findAllAndDelete({ _id: params.id})
-         //.then
+      //   .then
    },
 
    // /api/users/:userid/friends/:friendId
